@@ -1,5 +1,6 @@
 const user = require("./models/user")
 const listing = require("./models/listing")
+const userListing = require("./models/userListing")
 
 exports.resolvers ={
     Query:{
@@ -15,33 +16,65 @@ exports.resolvers ={
             console.log(args)
             return user.findOne({userName: args.userName})
         },
-        getListings: async (parent,args)=>{
+        getAdminListings: async (parent,args)=>{
 
-            const listcheck = await user.find({})
-            console.log(listcheck[0].userName)
+            // there is not user vaildation on this page because the getListing commard will only be avialbile
+            // user's loged in to the front end, if they can access the front end, they can be here
+             const listcheck = await listing.find({})
+             //postal code is not null in the Mongo database but is treated as null in graphql
+             //beacuse the code is identical to the getUser, i am assuming this is a Graphql problem
 
-            for(i=0;i<(await listcheck).length;i++){
-                if(JSON.stringify(listcheck[i].userName) == JSON.stringify(args.username)){
-                    console.log("works!")
-                }else{
-                    console.log("didn't")
-                }
-            }
-            console.log("hello")
-            return listing.find({})
+             return listing.find({})
+             //console.log(listcheck[0].userName)
+
+            // for(i=0;i<(await listcheck).length;i++){
+            //     if(JSON.stringify(listcheck[i].userName) == JSON.stringify(args.username)){
+            //         console.log("works!")
+            //     }else{
+            //         console.log("didn't")
+            //     }
+            // }
+            // console.log("hello")
+            
         },
-        testlogin:async (parent,args,context)=>{
-            console.log("if state pre")
-            //console.log(context.user)
-            const listcheck = await user.find({})
-            if(JSON.stringify(listcheck[0].userName) == JSON.stringify(args.userName)&&
-            JSON.stringify(listcheck[0].password) == JSON.stringify(args.password)){
-                return ["bill","jim"]
-            } 
-            //if (user.type.includes("admin")) return ['will', 'james'];
-            //console.log("if state post")
+        getAdminlistingsbyCity: async(parent,args)=>{
+            
+            console.log("Active")
+            const cityList = await listing.find({city: args.city})
+            //postal code is not null in the Mongo database but is treated as null in graphql
+            //beacuse the code is identical to the getUser, i am assuming this is a Graphql problem
+            
+            return cityList
 
-            return ['bob', 'jake'];           
+
+        },
+        getAdminlistingsbyUsername:async(parent,args) =>{
+            console.log("Active")
+            const cityList = await listing.find({userName: args.userName})
+            
+            return cityList
+
+        },
+        login:async (parent,args,context)=>{
+            console.log("active")
+
+            const listcheck = await user.find({})
+            //in testing with an incorrect input it said it couldn't read the userName and stopped,
+            //this means that this program can't reach my error message but still works as intened 
+
+            for(i=0; listcheck.length;i++){
+                if(JSON.stringify(listcheck[i].userName) === JSON.stringify(args.userName)&&
+                JSON.stringify(listcheck[i].password) === JSON.stringify(args.password)){
+                    console.log("Working!")
+                    return [listcheck[i].userName,listcheck[i].password]
+                } 
+            }
+            throw new Error ("username and password doen't match database")      
+        },
+        getuserListings: async (args)=>{
+            const userListinglist = userListing.find({})
+            console.log(userListinglist)
+            return userListinglist
         }
     },
 
@@ -59,10 +92,8 @@ exports.resolvers ={
             })
             return newUser.save()
         },
-        addUserlisting: async(parent,args) =>{
+        addAdminlisting: async(parent,args) =>{
 
-           
-            console.log('"admin"')
 
             const usercheck = await user.find({})
             console.log(JSON.stringify(usercheck[0].type))
@@ -84,15 +115,23 @@ exports.resolvers ={
                 })
                 return newListing.save()
             }else{
-                throw new Error("username and password have no admin privalge")
+                throw new Error("username and password invaild")
 
-                console.log("wrong username or password")
             }
+        },
+        addUserListing: async (args) =>{
 
-
-
-            console.log(newListing)
+            let newUserListing = new userListing({
+                listing_id: args.listing_id,
+                booking_id: args.booking_id,
+                booking_date: args.booking_date,
+                booking_start: args.booking_start,
+                booking_end: args.booking_end,
+                userName: args.userName,
+            })
+            return newUserListing.save()
         }
+
         
     }
 }

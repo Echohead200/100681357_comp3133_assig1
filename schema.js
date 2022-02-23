@@ -17,17 +17,27 @@ exports.typeDefs = gql `
         description: String!
         street: String!
         city: String!
-        postel_code: String!
+        postel_code: String
         price: Float!
         email: String!
         username: String!
+    }
+    type userListing{
+        listing_id: String! 
+        booking_id: String!
+        booking_start: String!
+        booking_end: String!
+        userName: String!
     }
     type Query {
         getUsers: [user]
         getUserbyId(id: ID!):user
         getUsersbyname(userName: String!):user
-        getListings(username: String!): [listing]
-        testlogin(userName: String!, password: String!):[String]
+        getAdminListings: [listing]
+        getuserListings:[userListing]
+        getAdminlistingsbyCity(city: String!):[listing]
+        getAdminlistingsbyUsername(userName:String):[listing]
+        login(userName: String!, password: String!):[String]
     }
     type Mutation {
         addUser (
@@ -38,7 +48,7 @@ exports.typeDefs = gql `
             email: String!
             type: String!
         ):user
-        addUserlisting(
+        addAdminlisting(
             listing_id: String!
             listing_title: String!
             description: String!
@@ -50,5 +60,12 @@ exports.typeDefs = gql `
             username: String!
             password: String!
         ):listing
+        addUserListing(
+        listing_id: String! 
+        booking_id: String!
+        booking_start: String!
+        booking_end: String!
+        userName: String!
+        ):userListing
     }
 `
