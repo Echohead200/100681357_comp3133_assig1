@@ -26,7 +26,8 @@ exports.typeDefs = gql `
         getUsers: [user]
         getUserbyId(id: ID!):user
         getUsersbyname(userName: String!):user
-        getListings: [listing]
+        getListings(username: String!): [listing]
+        testlogin(userName: String!, password: String!):[String]
     }
     type Mutation {
         addUser (
