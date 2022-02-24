@@ -17,7 +17,7 @@ exports.typeDefs = gql `
         description: String!
         street: String!
         city: String!
-        postel_code: String
+        postal_code: String!
         price: Float!
         email: String!
         username: String!

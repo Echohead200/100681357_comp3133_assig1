@@ -31,7 +31,6 @@ const listingSchema = new mongoose.Schema({
     },
     email:{
         type: String,
-        unique:[true,"Duplicate email are not alowed"],
         required:true,
         validate: function(value) {
             var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;

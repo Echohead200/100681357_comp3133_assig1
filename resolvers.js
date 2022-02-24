@@ -18,13 +18,12 @@ exports.resolvers ={
         },
         getAdminListings: async (parent,args)=>{
 
-            // there is not user vaildation on this page because the getListing commard will only be avialbile
-            // user's loged in to the front end, if they can access the front end, they can be here
+            // there is not user vaildation in this query because the getAdminListing commard will only be avialbile
+            // to Admin user's loged in to the front end, if they can access the front end, they can be here!
              const listcheck = await listing.find({})
-             //postal code is not null in the Mongo database but is treated as null in graphql
-             //beacuse the code is identical to the getUser, i am assuming this is a Graphql problem
 
-             return listing.find({})
+
+             return listcheck
              //console.log(listcheck[0].userName)
 
             // for(i=0;i<(await listcheck).length;i++){
@@ -34,6 +33,7 @@ exports.resolvers ={
             //         console.log("didn't")
             //     }
             // }
+            //throw new Error("incorrect login")
             // console.log("hello")
             
         },
@@ -47,8 +47,8 @@ exports.resolvers ={
             return cityList
         },
         getAdminlistingsbyUsername:async(parent,args) =>{
-            console.log("Active")
-            const cityList = await listing.find({userName: args.userName})
+            console.log(args.userName)
+            const cityList = await listing.find({username: args.userName})
             
             return cityList
 
