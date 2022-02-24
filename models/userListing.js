@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 
-const userlistingSchema = new mongoose.Schema({
+const userbookingSchema = new mongoose.Schema({
 
     listing_id:{
         type: String,
@@ -24,11 +24,10 @@ const userlistingSchema = new mongoose.Schema({
         required:[true,"Please enter booking_end"],
     },
     username:{
-        type: Date,
+        type: String,
         required:[true,"Please enter username"],
-        unique: [true,"That username is taken please choose another"]
     }
 })
 
-const userlisting = mongoose.model("userListing", userlistingSchema)
-module.exports = userlisting
+const userbooking = mongoose.model("userbooking", userbookingSchema)
+module.exports = userbooking

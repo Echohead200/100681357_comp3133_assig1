@@ -22,19 +22,20 @@ exports.typeDefs = gql `
         email: String!
         username: String!
     }
-    type userListing{
+    type userbooking{
         listing_id: String! 
         booking_id: String!
+        booking_date: String!
         booking_start: String!
         booking_end: String!
-        userName: String!
+        username: String!
     }
     type Query {
         getUsers: [user]
         getUserbyId(id: ID!):user
         getUsersbyname(userName: String!):user
         getAdminListings: [listing]
-        getuserListings:[userListing]
+        getuserbooking:[userbooking]
         getAdminlistingsbyCity(city: String!):[listing]
         getAdminlistingsbyUsername(userName:String):[listing]
         login(userName: String!, password: String!):[String]
@@ -58,14 +59,13 @@ exports.typeDefs = gql `
             price: Float!
             email: String!
             username: String!
-            password: String!
         ):listing
-        addUserListing(
+        adduserbooking(
         listing_id: String! 
         booking_id: String!
         booking_start: String!
         booking_end: String!
-        userName: String!
-        ):userListing
+        username: String!
+        ):userbooking
     }
 `

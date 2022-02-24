@@ -1,12 +1,12 @@
 const user = require("./models/user")
 const listing = require("./models/listing")
-const userListing = require("./models/userListing")
+const userbooking = require("./models/userListing")
 
 exports.resolvers ={
     Query:{
         getUsers: async (parent,args)=>{
             const userList = user.find({})
-            console.log(userList)
+            console.log("postman test 2")
             return userList
         },
         getUserbyId: async (parent,args)=>{
@@ -45,8 +45,6 @@ exports.resolvers ={
             //beacuse the code is identical to the getUser, i am assuming this is a Graphql problem
             
             return cityList
-
-
         },
         getAdminlistingsbyUsername:async(parent,args) =>{
             console.log("Active")
@@ -71,8 +69,8 @@ exports.resolvers ={
             }
             throw new Error ("username and password doen't match database")      
         },
-        getuserListings: async (args)=>{
-            const userListinglist = userListing.find({})
+        getuserbooking: async (args)=>{
+            const userListinglist = userbooking.find({})
             console.log(userListinglist)
             return userListinglist
         }
@@ -94,42 +92,36 @@ exports.resolvers ={
         },
         addAdminlisting: async(parent,args) =>{
 
+            
+            // there is no  vaildation in this Mutation because the addAdminlisting commard will only be avialbile
+            // users logged in to the front end, if they can access the front end, they can be here
 
-            const usercheck = await user.find({})
-            console.log(JSON.stringify(usercheck[0].type))
-
-            console.log(JSON.stringify(usercheck[0].userName))
-            if(JSON.stringify(args.username) === JSON.stringify(usercheck[0].userName) &&
-                 JSON.stringify(args.password) === JSON.stringify(usercheck[0].password)){
-                console.log("working now!")
-                let newListing = new listing({
-                    listing_id: args.listing_id,
-                    listing_title: args.listing_title ,
-                    description:args.description,
-                    street: args.street,
-                    city: args.city,
-                    postal_code: args.postal_code,
-                    price: args.price,
-                    email:args.email,
-                    username: args.username
-                })
-                return newListing.save()
-            }else{
-                throw new Error("username and password invaild")
-
-            }
+            let newListing = new listing({
+                listing_id: args.listing_id,
+                listing_title: args.listing_title ,
+                description:args.description,
+                street: args.street,
+                city: args.city,
+                postal_code: args.postal_code,
+                price: args.price,
+                email:args.email,
+                username: args.username
+            })
+            return newListing.save()
         },
-        addUserListing: async (args) =>{
+        adduserbooking: async (parent,args) =>{
+            console.log(args)
 
-            let newUserListing = new userListing({
+            let newUserBooking = new userbooking({
                 listing_id: args.listing_id,
                 booking_id: args.booking_id,
-                booking_date: args.booking_date,
                 booking_start: args.booking_start,
                 booking_end: args.booking_end,
-                userName: args.userName,
+                username: args.username
+
             })
-            return newUserListing.save()
+            
+            return newUserBooking.save()
         }
 
         
