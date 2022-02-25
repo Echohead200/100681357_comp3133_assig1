@@ -41,8 +41,13 @@ exports.resolvers ={
             
             console.log("Active")
             const cityList = await listing.find({city: args.city})
-            //postal code is not null in the Mongo database but is treated as null in graphql
-            //beacuse the code is identical to the getUser, i am assuming this is a Graphql problem
+            
+            return cityList
+        },
+        getAdminlistingsbyPostalCode: async(parent,args)=>{
+            
+            console.log("Active")
+            const cityList = await listing.find({postal_code: args.postal_code})
             
             return cityList
         },
@@ -75,6 +80,7 @@ exports.resolvers ={
             return userListinglist
         }
     },
+
 
     Mutation: {
         addUser: async (parent,args) =>{

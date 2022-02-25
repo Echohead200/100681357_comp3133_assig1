@@ -37,6 +37,7 @@ exports.typeDefs = gql `
         getAdminListings: [listing]
         getuserbooking:[userbooking]
         getAdminlistingsbyCity(city: String!):[listing]
+        getAdminlistingsbyPostalCode(postal_code: String!):[listing]
         getAdminlistingsbyUsername(userName:String):[listing]
         login(userName: String!, password: String!):[String]
     }
